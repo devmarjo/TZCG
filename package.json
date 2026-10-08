@@ -63,7 +63,7 @@
     "node": ">=18"
   },
   "overrides": {
-    "esbuild": "$esbuild"
+    "esbuild": "^0.28.2"
   },
   "keywords": [
     "react",
@@ -79,5 +79,13 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devmarjo/TZCG.git"
+  },
+  "homepage": "https://github.com/devmarjo/TZCG#readme",
+  "bugs": {
+    "url": "https://github.com/devmarjo/TZCG/issues"
   }
 }

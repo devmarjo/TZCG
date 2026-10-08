@@ -16,7 +16,7 @@ npm run build:demo
 npm pack
 ```
 
-A demo é separada do código da biblioteca e não entra no pacote npm. Pacote: `tzcg-react`, versão inicial `0.1.0`. A disponibilidade do nome foi consultada no npm durante a preparação. A publicação remota depende da conclusão do repositório GitHub; consulte `outputs/PUBLICACAO.md`.
+A demo é separada do código da biblioteca e não entra no pacote npm. Pacote: `tzcg-react`, versão inicial `0.1.0`. A disponibilidade do nome foi consultada no npm durante a preparação. Repositório: [devmarjo/TZCG](https://github.com/devmarjo/TZCG). Instruções de publicação em `outputs/PUBLICACAO.md`.
 
 ## Uso
 
