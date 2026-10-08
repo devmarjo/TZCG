@@ -1,0 +1,32 @@
+import { chromium } from '@playwright/test';
+import { writeFileSync } from 'node:fs';
+const browser=await chromium.launch({headless:true,executablePath:process.env.TZCG_CHROMIUM});
+const page=await browser.newPage({timezoneId:'Asia/Tokyo'});
+const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+await page.goto(process.env.TZCG_DEMO_URL||'http://127.0.0.1:5174/');
+await page.locator('[data-tzcg-row="__local"]').waitFor();
+await page.getByRole('combobox').fill('GRU');await page.getByRole('combobox').press('ArrowDown');await page.getByRole('combobox').press('Enter');
+await page.getByRole('button',{name:'Excluir London'}).click();
+await page.locator('[data-tzcg-row="__local"] .tzcg-drag').focus();await page.keyboard.press('ArrowDown');await page.keyboard.press('ArrowDown');
+const ids=()=>page.locator('[data-tzcg-row]').evaluateAll(rows=>rows.map(r=>r.dataset.tzcgRow));
+const expected=await ids();
+await page.reload();await page.locator('[data-tzcg-row="__local"]').waitFor();
+if(JSON.stringify(await ids())!==JSON.stringify(expected))throw Error('Reload failed to restore list/order');
+await page.getByRole('tab',{name:/Grid/}).click();
+if(JSON.stringify(await ids())!==JSON.stringify(expected))throw Error('Grid order differs');
+await page.context().setOffline(true);
+await page.getByRole('combobox').fill('KTM');await page.getByRole('combobox').press('ArrowDown');await page.getByRole('combobox').press('Enter');
+// A fresh timezone after reload must replace the machine zone, not reuse stored local data.
+await page.context().setOffline(false);
+const context=await browser.newContext({storageState:await page.context().storageState(),timezoneId:'Europe/Lisbon'});
+const other=await context.newPage();await other.goto(process.env.TZCG_DEMO_URL||'http://127.0.0.1:5174/');
+await other.locator('[data-tzcg-row="__local"]').waitFor();
+if(!(await other.locator('[data-tzcg-row="__local"]').textContent()).includes('Europe/Lisbon'))throw Error('Machine zone not redetected');
+// Empty saved list must not repopulate from the demo defaults.
+const buttons=page.getByRole('button',{name:/^Excluir /});while(await buttons.count())await buttons.first().click();
+await page.reload();await page.locator('[data-tzcg-row="__local"]').waitFor();
+if(JSON.stringify(await ids())!==JSON.stringify(['__local']))throw Error('Empty list not preserved');
+if(errors.length)throw Error(errors.join('\n'));
+writeFileSync('outputs/VALIDACAO-STORAGE.json',JSON.stringify({reloadRestoresLocationsAndOrder:true,offlineSearch:true,emptyListPreserved:true,machineZoneRedetected:true,pageErrors:errors},null,2));
+console.log('Storage reload, offline search, deletion, order, empty list and machine zone: OK');
+await browser.close();

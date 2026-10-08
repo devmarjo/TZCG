@@ -1,0 +1,12 @@
+node_modules/
+dist/
+demo-dist/
+work/
+*.tgz
+.DS_Store
+*.log
+.env
+.env.*
+.npmrc
+outputs/*.png
+outputs/VALIDACAO*.json

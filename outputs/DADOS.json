@@ -1,0 +1,17 @@
+{
+  "downloadedAt": "2026-10-08T09:38:04.477850+00:00",
+  "cities": 34155,
+  "airports": 65,
+  "sources": [
+    {
+      "url": "https://download.geonames.org/export/dump/cities15000.zip",
+      "sha256": "f181f7cb9e180b31f5e38e15fd4522895c9a6b628f8568d8277be05cab01daf2",
+      "license": "CC BY 4.0"
+    },
+    {
+      "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+      "sha256": "06bb430e3929969865065798765beaab4063e4695fbb32d83623b103a613e78f",
+      "license": "Public domain"
+    }
+  ]
+}
